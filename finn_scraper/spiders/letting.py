@@ -17,8 +17,6 @@ class LettingSpider(scrapy.Spider):
         self.start_urls = [
             base + '?' + parsed_query
         ]
-        print(self.start_urls)
-
 
     def parse(self, response):
 
