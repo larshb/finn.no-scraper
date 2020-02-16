@@ -1,6 +1,9 @@
 Finn.no Scraper
 ===============
 
+Unofficial Finn.no Letting-API, scraping data based on search results for links
+of type `https://www.finn.no/realestate/lettings/search.html?<querystring>`.
+
 ## Requirements
 
 ```bash
