@@ -1,24 +1,24 @@
 # -*- coding: utf-8 -*-
 import scrapy
-
+import urllib
 
 class LettingSpider(scrapy.Spider):
     name = 'letting'
     allowed_domains = ['finn.no']
 
-    # Filter: Location=Oslo
-    # start_urls = [
-    #     'https://www.finn.no/realestate/lettings/search.html?location=0.20061&page=1',
-    #     'https://www.finn.no/realestate/lettings/search.html?location=0.20061&page=2',
-    #     'https://www.finn.no/realestate/lettings/search.html?location=0.20061&page=3'
-    # ]
-
-    def __init__(self, location=None, *args, **kwargs):
+    def __init__(
+        self,
+        base='https://www.finn.no/realestate/lettings/search.html?',
+        *args,
+        **kwargs
+    ):
         super(LettingSpider, self).__init__(*args, **kwargs)
-        # location=0.20061 (Oslo)
+        parsed_query = urllib.parse.urlencode(args) if args else ''
         self.start_urls = [
-            'https://www.finn.no/realestate/lettings/search.html?location=%s' % location
+            base + '?' + parsed_query
         ]
+        print(self.start_urls)
+
 
     def parse(self, response):
 
@@ -39,10 +39,6 @@ class LettingSpider(scrapy.Spider):
             }
 
         next_page = response.css("* > div > nav > a.button--icon-right::attr(href)").get()
-        print("---------------------------------------------------------------")
-        print(next_page)
-        print("---------------------------------------------------------------")
         if next_page:
-            #next_page = response.urljoin(next_page)
             next_page = "https://www.finn.no" + next_page
             yield scrapy.Request(next_page, callback=self.parse)
